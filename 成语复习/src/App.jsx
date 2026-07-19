@@ -10,7 +10,14 @@ const getShortMeaning = (meaning) => {
   // Split by Chinese period
   let parts = meaning.split('。')
     .map(p => p.trim())
-    .filter(p => p && !p.includes('：') && !p.includes(':')); // Filter out parts with colons
+    .filter(p => {
+      if (!p) return false;
+      if (p.includes('：') || p.includes(':')) return false; // Filter out parts with colons
+      
+      // Filter out references starting with "同“" or "同 \"" or similar
+      const isSynonymRef = p.startsWith('同“') || p.startsWith('同"') || p.startsWith('同「') || p.startsWith('同 \'') || p.startsWith('同\'');
+      return !isSynonymRef;
+    });
     
   if (parts.length === 0) {
     return meaning; // Fallback if everything is filtered out
@@ -46,6 +53,12 @@ const getShortMeaning = (meaning) => {
       parts = parts.slice(firstKwIdx);
     }
   }
+  
+  // Extra layer of cleaning: double check inside the final parts to strip any inner "同“..." sentences
+  parts = parts.filter(p => {
+    const isSynonymRef = p.startsWith('同“') || p.startsWith('同"') || p.startsWith('同「') || p.startsWith('同 \'') || p.startsWith('同\'');
+    return !isSynonymRef;
+  });
   
   const result = parts.join('。') + (meaning.endsWith('。') ? '。' : '');
   
