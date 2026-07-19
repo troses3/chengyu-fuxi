@@ -379,7 +379,7 @@ function App() {
                       </div>
 
                       {distractorOpt && (
-                        <div className={`full-definition-container distractor-definition ${isWrongSelected ? 'highlight-wrong' : ''}`}>
+                        <div className="full-definition-container distractor-definition">
                           <strong>
                             【{distractorOpt.word}】的完整释义（干扰项）
                             {isWrongSelected && " - 你误选了此项"}

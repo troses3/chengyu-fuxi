@@ -642,20 +642,11 @@ body {
 }
 
 .distractor-definition {
-  background: rgba(100, 116, 139, 0.02);
-  border-left-color: rgba(100, 116, 139, 0.4);
+  background: rgba(239, 68, 68, 0.03);
+  border-left-color: #ef4444;
   margin-top: 0.6rem;
 }
 
 .distractor-definition strong {
-  color: var(--text-secondary);
-}
-
-.distractor-definition.highlight-wrong {
-  background: rgba(239, 68, 68, 0.03);
-  border-left-color: #ef4444;
-}
-
-.distractor-definition.highlight-wrong strong {
   color: #ef4444;
 }
