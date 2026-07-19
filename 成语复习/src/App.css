@@ -35,7 +35,7 @@ body {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 2rem calc(3.5rem + env(safe-area-inset-bottom)) 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -285,7 +285,8 @@ body {
 .btn-known:hover { background: rgba(16, 185, 129, 1); }
 
 .controls {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .btn-text {
