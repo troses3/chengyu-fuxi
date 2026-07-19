@@ -6,23 +6,41 @@ const STORAGE_KEY = 'idiom-tracker-data-v4';
 
 const getShortMeaning = (meaning) => {
   if (!meaning) return "";
-  if (!meaning.includes('：') && !meaning.includes(':')) {
-    return meaning;
-  }
-  const parts = meaning.split('。');
-  const shortParts = parts
-    .map(p => p.trim())
-    .filter(p => p && !p.includes('：') && !p.includes(':'));
   
-  if (shortParts.length > 0) {
-    // Check if the filtered meaning actually says something descriptive
-    // e.g. if it only contains punctuation or single char, fallback to original
-    const result = shortParts.join('。') + (meaning.endsWith('。') ? '。' : '');
-    if (result.replace(/[。，；、“”‘’（）]/g, '').trim().length > 1) {
-      return result;
+  // Split by Chinese period
+  let parts = meaning.split('。')
+    .map(p => p.trim())
+    .filter(p => p && !p.includes('：') && !p.includes(':')); // Filter out parts with colons
+    
+  if (parts.length === 0) {
+    return meaning; // Fallback if everything is filtered out
+  }
+  
+  const keywords = ['比喻', '形容', '指', '是指', '后指', '多形容', '后多比喻', '也比喻', '用于', '表示', '意思是', '本意指', '通常指'];
+  
+  // Find first part containing a keyword
+  let firstKwIdx = -1;
+  for (let idx = 0; idx < parts.length; idx++) {
+    const part = parts[idx];
+    if (keywords.some(kw => part.includes(kw))) {
+      firstKwIdx = idx;
+      break;
     }
   }
-  return meaning; // Fallback to full meaning if everything had a colon or is too short
+  
+  if (firstKwIdx !== -1) {
+    // Discard all parts before the keyword part (which are likely literal meanings)
+    parts = parts.slice(firstKwIdx);
+  }
+  
+  const result = parts.join('。') + (meaning.endsWith('。') ? '。' : '');
+  
+  // Safe fallback if resulting string is too short/empty
+  if (result.replace(/[。，；、“”‘’（）]/g, '').trim().length > 1) {
+    return result;
+  }
+  
+  return meaning;
 };
 
 function App() {
