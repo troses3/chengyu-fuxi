@@ -286,22 +286,33 @@ body {
 .btn-known:hover { background: rgba(16, 185, 129, 1); }
 
 .controls {
+  display: flex;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.25rem;
+  border-radius: 20px;
+  width: fit-content;
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn-text {
-  background: none;
+  padding: 0.4rem 1.2rem;
   border: none;
+  background: white;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.85rem;
-  text-decoration: underline;
-  transition: color 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
 }
 
 .btn-text:hover {
-  color: var(--text-primary);
+  color: var(--danger);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .loading {
