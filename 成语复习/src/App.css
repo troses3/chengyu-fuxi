@@ -617,7 +617,6 @@ body {
 .card-back-inner {
   padding: 1.25rem 1.5rem;
   width: 100%;
-  min-height: 100%; /* Take full card height for scroll container */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
