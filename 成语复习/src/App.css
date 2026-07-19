@@ -133,7 +133,7 @@ body {
 
 .card-container {
   width: 100%;
-  height: 380px;
+  height: 320px;
   cursor: pointer;
   position: relative;
 }
@@ -177,6 +177,17 @@ body {
   align-items: flex-start;
   justify-content: flex-start;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-back h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  width: 100%;
 }
 
 .idiom-word {
@@ -214,10 +225,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 0.75rem;
   width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  padding-bottom: 0.5rem;
 }
 
 .idiom-details h3 {
@@ -467,6 +475,8 @@ body {
 .quiz-feedback-details {
   width: 100%;
   animation: slideUp 0.3s ease-out;
+  margin-top: auto;
+  padding-top: 0.75rem;
 }
 
 @keyframes slideUp {
