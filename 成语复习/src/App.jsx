@@ -229,7 +229,10 @@ function App() {
               localStorage.removeItem(STORAGE_KEY);
               window.location.reload();
             }
-          }}>重置进度</button>
+          }}>
+            <span className="reset-icon">🔄</span>
+            <span className="reset-text">重置进度</span>
+          </button>
         </div>
       </main>
     </div>

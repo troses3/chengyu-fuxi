@@ -294,7 +294,9 @@ body {
 
 .btn-text {
   flex: 1;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.7rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.8);
@@ -305,7 +307,7 @@ body {
   cursor: pointer;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(16px);
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-text:hover {
@@ -313,6 +315,31 @@ body {
   border-color: rgba(239, 68, 68, 0.3);
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);
+}
+
+.reset-icon {
+  font-size: 0.95rem;
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.btn-text:hover .reset-icon {
+  transform: rotate(-180deg);
+}
+
+.reset-text {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, margin-left 0.3s ease;
+}
+
+.btn-text:hover .reset-text {
+  max-width: 100px;
+  opacity: 1;
+  margin-left: 0.5rem;
 }
 
 .loading {
