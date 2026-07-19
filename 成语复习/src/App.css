@@ -654,7 +654,7 @@ body {
 .full-definition-container strong {
   display: block;
   font-size: 0.8rem; /* Increased from 0.72rem */
-  color: var(--accent-color);
+  color: #f59e0b; /* Golden yellow for all definition titles */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.25rem;
@@ -665,10 +665,6 @@ body {
   background: rgba(245, 158, 11, 0.015); /* Extemely soft warm yellow tint */
   border-left-color: rgba(245, 158, 11, 0.4); /* Softer semi-transparent amber border */
   margin-top: 0.6rem;
-}
-
-.distractor-definition strong {
-  color: #f59e0b; /* Match 'unsure' (模糊) yellow button color */
 }
 
 /* Red highlighted styling for the specific wrong option user clicked */

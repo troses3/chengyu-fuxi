@@ -405,7 +405,7 @@ function App() {
                         </div>
                         
                         <div className="full-definition-container">
-                          <strong>【{currentIdiom.word}】的完整释义：</strong>
+                          <strong>【{currentIdiom.word}】的完整释义</strong>
                           <span className="full-definition-text">{currentIdiom.meaning}</span>
                         </div>
 
@@ -414,7 +414,7 @@ function App() {
                           return (
                             <div key={idx} className={`full-definition-container distractor-definition ${isUserSelected ? 'user-selected-distractor' : ''}`}>
                               <strong>
-                                【{opt.word}】的完整释义（干扰项）
+                                【{opt.word}】的完整释义
                                 {isUserSelected && " - 你误选了此项"}
                               </strong>
                               <span className="full-definition-text">{opt.fullText}</span>
