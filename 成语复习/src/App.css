@@ -326,7 +326,7 @@ body {
 }
 
 .btn-text:hover .reset-icon {
-  transform: rotate(-180deg);
+  transform: rotate(180deg);
 }
 
 .reset-text {
