@@ -287,30 +287,36 @@ body {
 
 .controls {
   display: flex;
+  justify-content: center;
   width: 100%;
   margin-top: -0.25rem;
   margin-bottom: 0.5rem;
 }
 
 .btn-text {
-  flex: 1;
+  flex: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.7rem 1rem;
+  width: 38px;
+  height: 38px;
+  padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.8);
-  border-radius: 24px;
+  border-radius: 50%;
   font-size: 0.9rem;
   font-weight: 600;
   color: #9ca3af;
   cursor: pointer;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(16px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .btn-text:hover {
+  width: 120px;
+  border-radius: 24px;
   color: var(--danger);
   border-color: rgba(239, 68, 68, 0.3);
   background: rgba(255, 255, 255, 0.95);
@@ -322,6 +328,7 @@ body {
   display: inline-block;
   line-height: 1;
   transition: transform 0.4s ease;
+  flex-shrink: 0;
 }
 
 .btn-text:hover .reset-icon {
@@ -338,9 +345,9 @@ body {
 }
 
 .btn-text:hover .reset-text {
-  max-width: 100px;
+  max-width: 70px;
   opacity: 1;
-  margin-left: 0.5rem;
+  margin-left: 0.4rem;
 }
 
 .loading {
