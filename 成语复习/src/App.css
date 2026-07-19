@@ -452,6 +452,10 @@ body {
   margin-bottom: 0.75rem;
 }
 
+.options-container.quiz-not-answered {
+  gap: 1.6rem; /* Increased spacing by ~30% when not answered */
+}
+
 .option-btn {
   width: 100%;
   padding: 0.7rem 1rem;
@@ -547,12 +551,12 @@ body {
 }
 
 .group-tag {
-  font-size: 0.65rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-secondary);
   background: rgba(0, 0, 0, 0.04);
-  padding: 0.2rem 0.5rem;
-  border-radius: 12px;
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
   margin-bottom: 0.9rem;
   white-space: nowrap;
   max-width: 100%;

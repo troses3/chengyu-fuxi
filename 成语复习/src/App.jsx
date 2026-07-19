@@ -338,7 +338,7 @@ function App() {
                   </div>
                   <h3>{currentIdiom.word}</h3>
                   <div className="quiz-title">请选择正确的释义：</div>
-                  <div className="options-container">
+                  <div className={`options-container ${selectedOption === null ? 'quiz-not-answered' : ''}`}>
                     {shuffledOptions.map((opt, index) => {
                       let btnClass = "option-btn";
                       if (selectedOption !== null) {
