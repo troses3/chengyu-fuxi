@@ -22,9 +22,6 @@ body {
   background-color: var(--bg-color);
   color: var(--text-primary);
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-image: 
     radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
@@ -39,6 +36,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+  justify-content: center; /* Center the layout vertically on desktop viewports */
 }
 
 .header {
@@ -245,6 +245,7 @@ body {
   align-items: flex-start;
   justify-content: flex-start;
   overflow-y: auto;
+  overscroll-behavior-y: auto; /* Enable scroll chaining to parent viewport when boundaries are hit */
   display: flex;
   flex-direction: column;
   padding: 0 !important; /* Allow scroll box to span full area */
@@ -440,13 +441,11 @@ body {
   .idiom-meaning { font-size: 1rem; }
   
   .card-container {
-    height: 300px; /* Shorter card by default on mobile screens */
+    height: 340px; /* Keep consistent default height on mobile */
   }
   
   .card-container.expanded {
-    height: calc(100dvh - 240px); /* Fill remaining viewport space dynamically */
-    min-height: 420px;
-    max-height: 500px; /* Cap mobile height at 500px to keep bottom buttons visible on all phone screens */
+    height: 580px; /* Taller card on mobile since scroll chaining is fully active */
   }
 }
 
