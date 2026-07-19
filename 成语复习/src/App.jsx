@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { initialIdioms } from './data/idioms';
 import './App.css';
 
-const STORAGE_KEY = 'idiom-tracker-data-v3';
+const STORAGE_KEY = 'idiom-tracker-data-v4';
 
 function App() {
   const [idioms, setIdioms] = useState([]);
@@ -50,9 +50,25 @@ function App() {
 
   useEffect(() => {
     if (idioms.length > 0 && currentIdiom) {
+      // Find candidates in the same group
+      const sameGroupCandidates = idioms.filter(i => i.group === currentIdiom.group && i.word !== currentIdiom.word);
+      let distractorMeaning = "比喻与本意不相符的其他事物或行为。";
+      
+      if (sameGroupCandidates.length > 0) {
+        const randomCandidate = sameGroupCandidates[Math.floor(Math.random() * sameGroupCandidates.length)];
+        distractorMeaning = randomCandidate.meaning;
+      } else {
+        // Fallback: pick any random idiom from the list
+        const otherCandidates = idioms.filter(i => i.word !== currentIdiom.word);
+        if (otherCandidates.length > 0) {
+          const randomCandidate = otherCandidates[Math.floor(Math.random() * otherCandidates.length)];
+          distractorMeaning = randomCandidate.meaning;
+        }
+      }
+      
       const opts = [
         { text: currentIdiom.meaning, isCorrect: true },
-        { text: currentIdiom.distractor || "比喻与本意不相符的其他事物或行为。", isCorrect: false }
+        { text: distractorMeaning, isCorrect: false }
       ];
       const shuffled = Math.random() < 0.5 ? [opts[0], opts[1]] : [opts[1], opts[0]];
       setShuffledOptions(shuffled);
@@ -238,6 +254,9 @@ function App() {
               )}
             </div>
             <div className="card-back">
+              <div className="group-tag">
+                {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
+              </div>
               <h3>{currentIdiom.word}</h3>
               <div className="quiz-title">请选择正确的释义：</div>
               <div className="options-container">
@@ -279,11 +298,21 @@ function App() {
               {selectedOption !== null && (
                 <div className="quiz-feedback-details">
                   <div className="idiom-details">
-                    <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : currentIdiom.color === '褒义' ? 'positive' : 'neutral'}`}>
-                      {currentIdiom.color}
-                    </span>
-                    <span className="freq-tag">考频: {currentIdiom.frequency} 次</span>
+                    {currentIdiom.color !== '中性' && (
+                      <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
+                        {currentIdiom.color}
+                      </span>
+                    )}
                   </div>
+                  {currentIdiom.examples && currentIdiom.examples.length > 0 && (
+                    <div className="examples-container">
+                      {currentIdiom.examples.map((ex, exIdx) => (
+                        <div key={exIdx} className="example-item">
+                          <strong>例{exIdx + 1}：</strong>{ex}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

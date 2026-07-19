@@ -238,7 +238,7 @@ body {
 .card-back {
   transform: rotateY(180deg);
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -538,11 +538,65 @@ body {
 .quiz-feedback-details {
   width: 100%;
   animation: slideUp 0.3s ease-out;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
 }
 
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.group-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.examples-container {
+  width: 100%;
+  margin-top: 0.6rem;
+  text-align: left;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+  padding-top: 0.5rem;
+}
+
+.example-item {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin-bottom: 0.4rem;
+  background: rgba(0, 0, 0, 0.015);
+  padding: 0.3rem 0.45rem;
+  border-radius: 6px;
+  border-left: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.example-item strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Custom Scrollbar for Card Back */
+.card-back::-webkit-scrollbar {
+  width: 4px;
+}
+
+.card-back::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card-back::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.card-back::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.15);
 }
