@@ -436,8 +436,18 @@ body {
 
 @media (max-width: 600px) {
   .idiom-word { font-size: 2.5rem; }
-  .card-front, .card-back { padding: 1.5rem; }
+  .card-front, .card-back { padding: 1.25rem 1rem; }
   .idiom-meaning { font-size: 1rem; }
+  
+  .card-container {
+    height: 300px; /* Shorter card by default on mobile screens */
+  }
+  
+  .card-container.expanded {
+    height: calc(100dvh - 240px); /* Fill remaining viewport space dynamically */
+    min-height: 420px;
+    max-height: 500px; /* Cap mobile height at 500px to keep bottom buttons visible on all phone screens */
+  }
 }
 
 /* Quiz Option Styles */
@@ -631,7 +641,7 @@ body {
 
 @media (max-width: 600px) {
   .card-back-inner {
-    padding: 1.5rem;
+    padding: 1.25rem 1rem; /* Slightly reduce padding on mobile to maximize viewport area */
   }
 }
 
