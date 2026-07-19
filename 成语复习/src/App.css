@@ -411,25 +411,46 @@ body {
   flex-shrink: 0;
 }
 
+.option-text {
+  flex: 1;
+  text-align: left;
+}
+
+.option-status-icon {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+  align-self: center;
+  line-height: 1;
+}
+
 /* Correct and Incorrect selection colors */
 .option-btn.correct {
   background: rgba(16, 185, 129, 0.15) !important;
   border-color: #10b981 !important;
   color: #065f46 !important;
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.1) !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15) !important;
 }
 .option-btn.correct .option-label {
   color: #10b981 !important;
+}
+.option-btn.correct .option-status-icon {
+  color: #10b981;
 }
 
 .option-btn.incorrect {
   background: rgba(239, 68, 68, 0.12) !important;
   border-color: #ef4444 !important;
   color: #991b1b !important;
-  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15) !important;
 }
 .option-btn.incorrect .option-label {
   color: #ef4444 !important;
+}
+.option-btn.incorrect .option-status-icon {
+  color: #ef4444;
 }
 
 .option-btn.disabled {
@@ -451,16 +472,4 @@ body {
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.correct-answer-reveal {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--text-primary);
-  background: rgba(16, 185, 129, 0.04);
-  padding: 0.65rem 0.85rem;
-  border-radius: 12px;
-  border-left: 4px solid var(--success);
-  margin-top: 0.75rem;
-  width: 100%;
 }

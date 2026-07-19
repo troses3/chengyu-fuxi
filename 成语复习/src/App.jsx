@@ -191,7 +191,13 @@ function App() {
                       disabled={selectedOption !== null}
                     >
                       <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
-                      {opt.text}
+                      <span className="option-text">{opt.text}</span>
+                      {selectedOption !== null && opt.isCorrect && (
+                        <span className="option-status-icon correct-icon">✓</span>
+                      )}
+                      {selectedOption !== null && !opt.isCorrect && selectedOption === index && (
+                        <span className="option-status-icon incorrect-icon">✗</span>
+                      )}
                     </button>
                   );
                 })}
@@ -204,9 +210,6 @@ function App() {
                       {currentIdiom.color}
                     </span>
                     <span className="freq-tag">考频: {currentIdiom.frequency} 次</span>
-                  </div>
-                  <div className="correct-answer-reveal">
-                    <strong>正确释义：</strong>{currentIdiom.meaning}
                   </div>
                 </div>
               )}
