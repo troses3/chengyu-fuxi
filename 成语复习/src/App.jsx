@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { initialIdioms } from './data/idioms';
 import './App.css';
 
@@ -113,6 +113,23 @@ function App() {
 
   const [shuffledOptions, setShuffledOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  
+  const cardBackInnerRef = useRef(null);
+  const [cardHeight, setCardHeight] = useState('340px');
+
+  useEffect(() => {
+    if (selectedOption === null) {
+      setCardHeight('340px');
+    } else {
+      // Small timeout to allow DOM to render new content before measuring
+      setTimeout(() => {
+        if (cardBackInnerRef.current) {
+          const contentHeight = cardBackInnerRef.current.scrollHeight;
+          setCardHeight(`${Math.max(340, contentHeight)}px`);
+        }
+      }, 50);
+    }
+  }, [selectedOption, currentIdiom]);
 
   useEffect(() => {
     if (idioms.length > 0 && currentIdiom) {
@@ -319,7 +336,7 @@ function App() {
       </header>
 
       <main className="main-content">
-        <div className={`card-container ${selectedOption !== null ? 'expanded' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
+        <div className={`card-container ${selectedOption !== null ? 'expanded' : ''}`} style={{ height: cardHeight }} onClick={() => setIsFlipped(!isFlipped)}>
           <div className={`card ${isFlipped ? 'flipped' : ''}`}>
             <div className="card-front">
               <h2 className="idiom-word">{currentIdiom.word}</h2>
@@ -331,7 +348,7 @@ function App() {
               )}
             </div>
             <div className="card-back">
-              <div className="card-back-inner">
+              <div className="card-back-inner" ref={cardBackInnerRef}>
                 <div className="group-tag">
                   {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
                 </div>

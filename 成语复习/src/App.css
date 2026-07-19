@@ -201,9 +201,8 @@ body {
   position: relative;
   transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth height transition when answered */
 }
-
 .card-container.expanded {
-  height: 640px; /* Expanded card when answered to fit examples and translations */
+  /* Height is now managed dynamically by React inline styles */
 }
 
 .card {
@@ -244,8 +243,7 @@ body {
   transform: rotateY(180deg);
   align-items: flex-start;
   justify-content: flex-start;
-  overflow-y: auto;
-  overscroll-behavior-y: auto; /* Enable scroll chaining to parent viewport when boundaries are hit */
+  overflow: visible; /* CRITICAL: Remove inner scrollbar completely to enable flawless native page scrolling */
   display: flex;
   flex-direction: column;
   padding: 0 !important; /* Allow scroll box to span full area */
@@ -442,10 +440,6 @@ body {
   
   .card-container {
     height: 340px; /* Keep consistent default height on mobile */
-  }
-  
-  .card-container.expanded {
-    height: 580px; /* Taller card on mobile since scroll chaining is fully active */
   }
 }
 
