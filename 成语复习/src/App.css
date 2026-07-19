@@ -662,13 +662,13 @@ body {
 }
 
 .distractor-definition {
-  background: rgba(245, 158, 11, 0.03);
-  border-left-color: #f59e0b; /* Amber/yellow border for general distractors */
+  background: rgba(245, 158, 11, 0.015); /* Extemely soft warm yellow tint */
+  border-left-color: rgba(245, 158, 11, 0.4); /* Softer semi-transparent amber border */
   margin-top: 0.6rem;
 }
 
 .distractor-definition strong {
-  color: #d97706; /* Amber text for general distractors */
+  color: #b45309; /* Soft dark amber for readable contrast */
 }
 
 /* Red highlighted styling for the specific wrong option user clicked */
