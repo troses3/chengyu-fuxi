@@ -131,7 +131,7 @@ function App() {
   return (
     <div className="app-container">
       <header className="header">
-        <h1>🎯 备考成语闯关</h1>
+        <h1>成语题库</h1>
         <div className="progress-container">
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${progress}%` }}></div>
