@@ -376,14 +376,14 @@ body {
   font-size: 0.95rem;
   color: var(--text-secondary);
   font-weight: 600;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.2rem;
   width: 100%;
 }
 
 .options-container {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1.2rem;
   width: 100%;
   margin-bottom: 0.75rem;
 }
