@@ -90,8 +90,71 @@ body {
 .stats {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
-  font-weight: 500;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.5rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.stat-item:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-known { background: #10b981; }
+.dot-unsure { background: #f59e0b; }
+.dot-unknown { background: #ef4444; }
+
+/* Active Filter styles */
+.stat-item.active-known {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}
+
+.stat-item.active-unsure {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: #f59e0b;
+}
+
+.stat-item.active-unknown {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+}
+
+.stat-item.active-all {
+  background: rgba(100, 116, 139, 0.12);
+  border-color: rgba(100, 116, 139, 0.25);
+  color: var(--text-secondary);
+}
+
+.stat-count {
+  font-weight: 700;
 }
 
 .mode-toggle {

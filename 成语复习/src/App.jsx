@@ -9,6 +9,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [stats, setStats] = useState({ known: 0, unsure: 0, unknown: 0 });
+  const [filter, setFilter] = useState('all'); // 'all', 'known', 'unsure', 'unknown'
   const [isRandom, setIsRandom] = useState(() => {
     return localStorage.getItem('idiom-tracker-random') === 'true';
   });
@@ -59,6 +60,27 @@ function App() {
     }
   }, [currentIndex, idioms.length]);
 
+  const handleFilterClick = (targetFilter) => {
+    if (filter === targetFilter) {
+      setFilter('all');
+      return;
+    }
+    const count = targetFilter === 'known' ? stats.known :
+                  targetFilter === 'unsure' ? stats.unsure :
+                  targetFilter === 'unknown' ? stats.unknown : 0;
+    if (count === 0) {
+      alert(`当前没有处于“${targetFilter === 'known' ? '已掌握' : targetFilter === 'unsure' ? '模糊' : '生词'}”状态的成语！`);
+      return;
+    }
+    const targetIndex = idioms.findIndex(i => i.status === targetFilter);
+    if (targetIndex !== -1) {
+      setFilter(targetFilter);
+      setCurrentIndex(targetIndex);
+      setIsFlipped(false);
+      setSelectedOption(null);
+    }
+  };
+
   const handleNext = (status) => {
     const updatedIdioms = [...idioms];
     updatedIdioms[currentIndex].status = status;
@@ -68,48 +90,72 @@ function App() {
     // Select next idiom index
     setTimeout(() => {
       let nextIndex = currentIndex;
-      if (isRandom) {
-        // Find indices of idioms that are not 'known'
-        const candidateIndices = [];
-        updatedIdioms.forEach((idiom, index) => {
-          if (idiom.status !== 'known') {
-            candidateIndices.push(index);
-          }
-        });
+      let activeFilter = filter;
+      let candidates = [];
+      
+      if (filter !== 'all') {
+        candidates = updatedIdioms
+          .map((idiom, index) => ({ status: idiom.status, index }))
+          .filter(item => item.status === filter)
+          .map(item => item.index);
         
-        if (candidateIndices.length > 0) {
-          // Exclude current index if possible to prevent repeating the same card
-          let finalCandidates = candidateIndices;
-          if (candidateIndices.length > 1) {
-            finalCandidates = candidateIndices.filter(idx => idx !== currentIndex);
-          }
-          const randomIdx = Math.floor(Math.random() * finalCandidates.length);
-          nextIndex = finalCandidates[randomIdx];
-        } else {
-          // If all are known, pick any random index except current
-          const allIndices = Array.from({length: idioms.length}, (_, i) => i);
-          const otherIndices = allIndices.filter(idx => idx !== currentIndex);
-          if (otherIndices.length > 0) {
-            nextIndex = otherIndices[Math.floor(Math.random() * otherIndices.length)];
+        if (candidates.length === 0) {
+          activeFilter = 'all';
+          setFilter('all');
+          alert(`恭喜！你已复习完该类别的所有成语，系统已自动切回“全部”模式。`);
+        }
+      }
+      
+      if (activeFilter === 'all') {
+        if (isRandom) {
+          const candidateIndices = [];
+          updatedIdioms.forEach((idiom, index) => {
+            if (idiom.status !== 'known') {
+              candidateIndices.push(index);
+            }
+          });
+          
+          if (candidateIndices.length > 0) {
+            let finalCandidates = candidateIndices;
+            if (candidateIndices.length > 1) {
+              finalCandidates = candidateIndices.filter(idx => idx !== currentIndex);
+            }
+            nextIndex = finalCandidates[Math.floor(Math.random() * finalCandidates.length)];
           } else {
-            nextIndex = 0; // Only one idiom total
+            const allIndices = Array.from({length: idioms.length}, (_, i) => i);
+            const otherIndices = allIndices.filter(idx => idx !== currentIndex);
+            nextIndex = otherIndices.length > 0 
+              ? otherIndices[Math.floor(Math.random() * otherIndices.length)]
+              : 0;
+          }
+        } else {
+          let found = false;
+          for (let i = 0; i < idioms.length; i++) {
+            let checkIndex = (currentIndex + 1 + i) % idioms.length;
+            if (updatedIdioms[checkIndex].status !== 'known') {
+              nextIndex = checkIndex;
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            nextIndex = (currentIndex + 1) % idioms.length;
           }
         }
       } else {
-        // Sequential mode logic
-        let found = false;
-        for (let i = 0; i < idioms.length; i++) {
-          let checkIndex = (currentIndex + 1 + i) % idioms.length;
-          if (updatedIdioms[checkIndex].status !== 'known') {
-            nextIndex = checkIndex;
-            found = true;
-            break;
+        // Filtered mode
+        if (isRandom) {
+          let finalCandidates = candidates;
+          if (candidates.length > 1) {
+            finalCandidates = candidates.filter(idx => idx !== currentIndex);
           }
-        }
-        if (!found) {
-          nextIndex = (currentIndex + 1) % idioms.length;
+          nextIndex = finalCandidates[Math.floor(Math.random() * finalCandidates.length)];
+        } else {
+          const nextCandidate = candidates.find(idx => idx > currentIndex);
+          nextIndex = nextCandidate !== undefined ? nextCandidate : candidates[0];
         }
       }
+      
       setCurrentIndex(nextIndex);
     }, 300);
   };
@@ -140,10 +186,37 @@ function App() {
             <div className="progress-fill" style={{ width: `${progress}%` }}></div>
           </div>
           <div className="stats">
-            <span style={{color: '#10b981'}}>已掌握: {stats.known}</span>
-            <span style={{color: '#f59e0b'}}>模糊: {stats.unsure}</span>
-            <span style={{color: '#ef4444'}}>生词: {stats.unknown}</span>
-            <span style={{color: '#9ca3af'}}>总计: {total}</span>
+            <button 
+              className={`stat-item ${filter === 'known' ? 'active-known' : ''}`}
+              onClick={() => handleFilterClick('known')}
+              title="只复习已掌握"
+            >
+              <span className="dot dot-known"></span>
+              已掌握: <span className="stat-count">{stats.known}</span>
+            </button>
+            <button 
+              className={`stat-item ${filter === 'unsure' ? 'active-unsure' : ''}`}
+              onClick={() => handleFilterClick('unsure')}
+              title="只复习模糊"
+            >
+              <span className="dot dot-unsure"></span>
+              模糊: <span className="stat-count">{stats.unsure}</span>
+            </button>
+            <button 
+              className={`stat-item ${filter === 'unknown' ? 'active-unknown' : ''}`}
+              onClick={() => handleFilterClick('unknown')}
+              title="只复习生词"
+            >
+              <span className="dot dot-unknown"></span>
+              生词: <span className="stat-count">{stats.unknown}</span>
+            </button>
+            <button 
+              className={`stat-item ${filter === 'all' ? 'active-all' : ''}`}
+              onClick={() => setFilter('all')}
+              title="查看全部"
+            >
+              总计: <span className="stat-count">{total}</span>
+            </button>
           </div>
           <div className="mode-toggle">
             <button className={`mode-btn ${!isRandom ? 'active' : ''}`} onClick={() => setIsRandom(false)}>顺序模式</button>
