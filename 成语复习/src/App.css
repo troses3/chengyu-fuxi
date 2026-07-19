@@ -581,7 +581,7 @@ body {
 }
 
 .example-item {
-  font-size: 0.72rem;
+  font-size: 0.8rem; /* Increased from 0.72rem */
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 0.4rem;
@@ -641,7 +641,7 @@ body {
   width: 100%;
   margin-top: 0.6rem;
   text-align: left;
-  font-size: 0.8rem;
+  font-size: 0.9rem; /* Increased from 0.8rem */
   color: var(--text-primary);
   line-height: 1.6;
   background: rgba(59, 130, 246, 0.03);
@@ -653,7 +653,7 @@ body {
 
 .full-definition-container strong {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.8rem; /* Increased from 0.72rem */
   color: var(--accent-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
