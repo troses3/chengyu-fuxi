@@ -230,7 +230,7 @@ function App() {
               window.location.reload();
             }
           }}>
-            <span className="reset-icon">🔄</span>
+            <span className="reset-icon">↻</span>
             <span className="reset-text">重置进度</span>
           </button>
         </div>

@@ -318,8 +318,9 @@ body {
 }
 
 .reset-icon {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   display: inline-block;
+  line-height: 1;
   transition: transform 0.4s ease;
 }
 
