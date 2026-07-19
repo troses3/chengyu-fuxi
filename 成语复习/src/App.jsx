@@ -133,21 +133,22 @@ function App() {
     if (idioms.length > 0 && currentIdiom) {
       // Find candidates in the same group
       const sameGroupCandidates = idioms.filter(i => i.group === currentIdiom.group && i.word !== currentIdiom.word);
-      let distractor = null;
       
-      if (sameGroupCandidates.length > 0) {
-        distractor = sameGroupCandidates[Math.floor(Math.random() * sameGroupCandidates.length)];
-      } else {
-        // Fallback: pick any random idiom from the list
-        const otherCandidates = idioms.filter(i => i.word !== currentIdiom.word);
-        if (otherCandidates.length > 0) {
-          distractor = otherCandidates[Math.floor(Math.random() * otherCandidates.length)];
-        }
+      let distractors = [];
+      
+      // Shuffle group candidates randomly
+      const shuffledGroupCandidates = [...sameGroupCandidates].sort(() => Math.random() - 0.5);
+      // Pick up to 3 distractors from the same group
+      distractors = shuffledGroupCandidates.slice(0, 3);
+      
+      // If we don't have enough, pick from other groups
+      if (distractors.length < 3) {
+        const otherCandidates = idioms.filter(i => i.word !== currentIdiom.word && !distractors.some(d => d.word === i.word));
+        const shuffledOtherCandidates = [...otherCandidates].sort(() => Math.random() - 0.5);
+        const needed = 3 - distractors.length;
+        distractors = [...distractors, ...shuffledOtherCandidates.slice(0, needed)];
       }
-      
-      const distractorMeaning = distractor ? distractor.meaning : "比喻与本意不相符的其他事物或行为。";
-      const distractorWord = distractor ? distractor.word : "其他成语";
-      
+
       const opts = [
         { 
           text: getShortMeaning(currentIdiom.meaning), 
@@ -155,14 +156,16 @@ function App() {
           isCorrect: true,
           word: currentIdiom.word
         },
-        { 
-          text: getShortMeaning(distractorMeaning), 
-          fullText: distractorMeaning,
+        ...distractors.map(d => ({
+          text: getShortMeaning(d.meaning),
+          fullText: d.meaning,
           isCorrect: false,
-          word: distractorWord
-        }
+          word: d.word
+        }))
       ];
-      const shuffled = Math.random() < 0.5 ? [opts[0], opts[1]] : [opts[1], opts[0]];
+      
+      // Shuffle the 4 options randomly
+      const shuffled = [...opts].sort(() => Math.random() - 0.5);
       setShuffledOptions(shuffled);
       setSelectedOption(null);
     }
@@ -376,7 +379,7 @@ function App() {
                           }}
                           disabled={selectedOption !== null}
                         >
-                          <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
+                          <span className="option-label">{['A', 'B', 'C', 'D'][index]}. </span>
                           <span className="option-text">{opt.text}</span>
                           {selectedOption !== null && opt.isCorrect && (
                             <span className="option-status-icon correct-icon">✓</span>
