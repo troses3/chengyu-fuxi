@@ -73,30 +73,33 @@ function App() {
     if (idioms.length > 0 && currentIdiom) {
       // Find candidates in the same group
       const sameGroupCandidates = idioms.filter(i => i.group === currentIdiom.group && i.word !== currentIdiom.word);
-      let distractorMeaning = "比喻与本意不相符的其他事物或行为。";
+      let distractor = null;
       
       if (sameGroupCandidates.length > 0) {
-        const randomCandidate = sameGroupCandidates[Math.floor(Math.random() * sameGroupCandidates.length)];
-        distractorMeaning = randomCandidate.meaning;
+        distractor = sameGroupCandidates[Math.floor(Math.random() * sameGroupCandidates.length)];
       } else {
         // Fallback: pick any random idiom from the list
         const otherCandidates = idioms.filter(i => i.word !== currentIdiom.word);
         if (otherCandidates.length > 0) {
-          const randomCandidate = otherCandidates[Math.floor(Math.random() * otherCandidates.length)];
-          distractorMeaning = randomCandidate.meaning;
+          distractor = otherCandidates[Math.floor(Math.random() * otherCandidates.length)];
         }
       }
+      
+      const distractorMeaning = distractor ? distractor.meaning : "比喻与本意不相符的其他事物或行为。";
+      const distractorWord = distractor ? distractor.word : "其他成语";
       
       const opts = [
         { 
           text: getShortMeaning(currentIdiom.meaning), 
           fullText: currentIdiom.meaning,
-          isCorrect: true 
+          isCorrect: true,
+          word: currentIdiom.word
         },
         { 
           text: getShortMeaning(distractorMeaning), 
           fullText: distractorMeaning,
-          isCorrect: false 
+          isCorrect: false,
+          word: distractorWord
         }
       ];
       const shuffled = Math.random() < 0.5 ? [opts[0], opts[1]] : [opts[1], opts[0]];
@@ -325,32 +328,46 @@ function App() {
                   })}
                 </div>
 
-                {selectedOption !== null && (
-                  <div className="quiz-feedback-details">
-                    <div className="idiom-details">
-                      {currentIdiom.color !== '中性' && (
-                        <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
-                          {currentIdiom.color}
-                        </span>
+                {selectedOption !== null && (() => {
+                  const distractorOpt = shuffledOptions.find(o => !o.isCorrect);
+                  const isWrongSelected = selectedOption !== null && shuffledOptions[selectedOption] && !shuffledOptions[selectedOption].isCorrect;
+                  return (
+                    <div className="quiz-feedback-details">
+                      <div className="idiom-details">
+                        {currentIdiom.color !== '中性' && (
+                          <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
+                            {currentIdiom.color}
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="full-definition-container">
+                        <strong>【{currentIdiom.word}】的完整释义：</strong>
+                        <span className="full-definition-text">{currentIdiom.meaning}</span>
+                      </div>
+
+                      {distractorOpt && (
+                        <div className={`full-definition-container distractor-definition ${isWrongSelected ? 'highlight-wrong' : ''}`}>
+                          <strong>
+                            【{distractorOpt.word}】的完整释义（干扰项）
+                            {isWrongSelected && " - 你误选了此项"}
+                          </strong>
+                          <span className="full-definition-text">{distractorOpt.fullText}</span>
+                        </div>
+                      )}
+
+                      {currentIdiom.examples && currentIdiom.examples.length > 0 && (
+                        <div className="examples-container">
+                          {currentIdiom.examples.map((ex, exIdx) => (
+                            <div key={exIdx} className="example-item">
+                              <strong>例{exIdx + 1}：</strong>{ex}
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
-                    
-                    <div className="full-definition-container">
-                      <strong>完整释义：</strong>
-                      <span className="full-definition-text">{currentIdiom.meaning}</span>
-                    </div>
-
-                    {currentIdiom.examples && currentIdiom.examples.length > 0 && (
-                      <div className="examples-container">
-                        {currentIdiom.examples.map((ex, exIdx) => (
-                          <div key={exIdx} className="example-item">
-                            <strong>例{exIdx + 1}：</strong>{ex}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             </div>
           </div>
