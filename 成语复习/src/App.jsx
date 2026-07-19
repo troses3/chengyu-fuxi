@@ -319,7 +319,7 @@ function App() {
       </header>
 
       <main className="main-content">
-        <div className="card-container" onClick={() => setIsFlipped(!isFlipped)}>
+        <div className={`card-container ${selectedOption !== null ? 'expanded' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
           <div className={`card ${isFlipped ? 'flipped' : ''}`}>
             <div className="card-front">
               <h2 className="idiom-word">{currentIdiom.word}</h2>
