@@ -665,16 +665,18 @@ body {
   background: rgba(245, 158, 11, 0.015); /* Extemely soft warm yellow tint */
   border-left-color: rgba(245, 158, 11, 0.4); /* Softer semi-transparent amber border */
   margin-top: 0.6rem;
+  color: var(--text-secondary); /* Soften body text to secondary gray for unselected distractors */
 }
 
 .distractor-definition strong {
-  color: #b45309; /* Soft dark amber for readable contrast */
+  color: #d97706; /* Lighter soft amber for the title */
 }
 
 /* Red highlighted styling for the specific wrong option user clicked */
 .distractor-definition.user-selected-distractor {
   background: rgba(239, 68, 68, 0.03);
   border-left-color: #ef4444;
+  color: var(--text-primary); /* Keep selected mistake text dark and prominent */
 }
 
 .distractor-definition.user-selected-distractor strong {
