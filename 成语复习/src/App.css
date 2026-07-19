@@ -242,6 +242,7 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  padding: 0 !important; /* Allow scroll box to span full area */
 }
 
 .card-back h3 {
@@ -599,4 +600,19 @@ body {
 
 .card-back::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.15);
+}
+
+.card-back-inner {
+  padding: 1.25rem 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media (max-width: 600px) {
+  .card-back-inner {
+    padding: 1.5rem;
+  }
 }

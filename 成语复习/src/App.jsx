@@ -254,67 +254,69 @@ function App() {
               )}
             </div>
             <div className="card-back">
-              <div className="group-tag">
-                {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
-              </div>
-              <h3>{currentIdiom.word}</h3>
-              <div className="quiz-title">请选择正确的释义：</div>
-              <div className="options-container">
-                {shuffledOptions.map((opt, index) => {
-                  let btnClass = "option-btn";
-                  if (selectedOption !== null) {
-                    if (opt.isCorrect) {
-                      btnClass += " correct";
-                    } else if (selectedOption === index) {
-                      btnClass += " incorrect";
+              <div className="card-back-inner">
+                <div className="group-tag">
+                  {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
+                </div>
+                <h3>{currentIdiom.word}</h3>
+                <div className="quiz-title">请选择正确的释义：</div>
+                <div className="options-container">
+                  {shuffledOptions.map((opt, index) => {
+                    let btnClass = "option-btn";
+                    if (selectedOption !== null) {
+                      if (opt.isCorrect) {
+                        btnClass += " correct";
+                      } else if (selectedOption === index) {
+                        btnClass += " incorrect";
+                      }
+                      btnClass += " disabled";
                     }
-                    btnClass += " disabled";
-                  }
-                  return (
-                    <button
-                      key={index}
-                      className={btnClass}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (selectedOption === null) {
-                          setSelectedOption(index);
-                        }
-                      }}
-                      disabled={selectedOption !== null}
-                    >
-                      <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
-                      <span className="option-text">{opt.text}</span>
-                      {selectedOption !== null && opt.isCorrect && (
-                        <span className="option-status-icon correct-icon">✓</span>
-                      )}
-                      {selectedOption !== null && !opt.isCorrect && selectedOption === index && (
-                        <span className="option-status-icon incorrect-icon">✗</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+                    return (
+                      <button
+                        key={index}
+                        className={btnClass}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (selectedOption === null) {
+                            setSelectedOption(index);
+                          }
+                        }}
+                        disabled={selectedOption !== null}
+                      >
+                        <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
+                        <span className="option-text">{opt.text}</span>
+                        {selectedOption !== null && opt.isCorrect && (
+                          <span className="option-status-icon correct-icon">✓</span>
+                        )}
+                        {selectedOption !== null && !opt.isCorrect && selectedOption === index && (
+                          <span className="option-status-icon incorrect-icon">✗</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
 
-              {selectedOption !== null && (
-                <div className="quiz-feedback-details">
-                  <div className="idiom-details">
-                    {currentIdiom.color !== '中性' && (
-                      <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
-                        {currentIdiom.color}
-                      </span>
+                {selectedOption !== null && (
+                  <div className="quiz-feedback-details">
+                    <div className="idiom-details">
+                      {currentIdiom.color !== '中性' && (
+                        <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
+                          {currentIdiom.color}
+                        </span>
+                      )}
+                    </div>
+                    {currentIdiom.examples && currentIdiom.examples.length > 0 && (
+                      <div className="examples-container">
+                        {currentIdiom.examples.map((ex, exIdx) => (
+                          <div key={exIdx} className="example-item">
+                            <strong>例{exIdx + 1}：</strong>{ex}
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </div>
-                  {currentIdiom.examples && currentIdiom.examples.length > 0 && (
-                    <div className="examples-container">
-                      {currentIdiom.examples.map((ex, exIdx) => (
-                        <div key={exIdx} className="example-item">
-                          <strong>例{exIdx + 1}：</strong>{ex}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
