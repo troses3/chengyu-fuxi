@@ -332,10 +332,10 @@ function App() {
             </div>
             <div className="card-back">
               <div className="card-back-inner">
+                <div className="group-tag">
+                  {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
+                </div>
                 <div className="card-back-content">
-                  <div className="group-tag">
-                    {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
-                  </div>
                   <h3>{currentIdiom.word}</h3>
                   <div className="quiz-title">请选择正确的释义：</div>
                   <div className={`options-container ${selectedOption === null ? 'quiz-not-answered' : ''}`}>
