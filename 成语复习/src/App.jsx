@@ -29,18 +29,25 @@ const getShortMeaning = (meaning) => {
   }
   
   if (firstKwIdx !== -1) {
-    // Discard all parts before the keyword part (which are likely literal meanings)
-    parts = parts.slice(firstKwIdx);
+    const matchedPart = parts[firstKwIdx];
+    // If the matched keyword starts with "也" (e.g. "也比喻", "也指", "也形容"),
+    // it implies the literal part and metaphorical part are complementary,
+    // so we preserve the original full meaning.
+    const startsWithAlso = matchedPart.startsWith('指导') ? false : (
+      matchedPart.startsWith('也比喻') || 
+      matchedPart.startsWith('也指') || 
+      matchedPart.startsWith('也形容') || 
+      matchedPart.startsWith('也用于') || 
+      matchedPart.startsWith('也表示')
+    );
+    
+    if (!startsWithAlso) {
+      // Discard all parts before the keyword part (which are likely pure literal meanings)
+      parts = parts.slice(firstKwIdx);
+    }
   }
   
-  let result = parts.join('。') + (meaning.endsWith('。') ? '。' : '');
-  
-  // Clean up leading "也" if followed by keyword to make standalone options sound natural
-  if (result.startsWith('也比喻')) result = result.substring(1);
-  else if (result.startsWith('也指')) result = result.substring(1);
-  else if (result.startsWith('也形容')) result = result.substring(1);
-  else if (result.startsWith('也用于')) result = result.substring(1);
-  else if (result.startsWith('也表示')) result = result.substring(1);
+  const result = parts.join('。') + (meaning.endsWith('。') ? '。' : '');
   
   // Safe fallback if resulting string is too short/empty
   if (result.replace(/[。，；、“”‘’（）]/g, '').trim().length > 1) {
