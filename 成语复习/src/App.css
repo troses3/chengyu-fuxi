@@ -616,3 +616,27 @@ body {
     padding: 1.5rem;
   }
 }
+
+.full-definition-container {
+  width: 100%;
+  margin-top: 0.6rem;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  background: rgba(59, 130, 246, 0.03);
+  border-left: 3px solid var(--accent-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.full-definition-container strong {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}

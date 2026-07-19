@@ -4,6 +4,27 @@ import './App.css';
 
 const STORAGE_KEY = 'idiom-tracker-data-v4';
 
+const getShortMeaning = (meaning) => {
+  if (!meaning) return "";
+  if (!meaning.includes('：') && !meaning.includes(':')) {
+    return meaning;
+  }
+  const parts = meaning.split('。');
+  const shortParts = parts
+    .map(p => p.trim())
+    .filter(p => p && !p.includes('：') && !p.includes(':'));
+  
+  if (shortParts.length > 0) {
+    // Check if the filtered meaning actually says something descriptive
+    // e.g. if it only contains punctuation or single char, fallback to original
+    const result = shortParts.join('。') + (meaning.endsWith('。') ? '。' : '');
+    if (result.replace(/[。，；、“”‘’（）]/g, '').trim().length > 1) {
+      return result;
+    }
+  }
+  return meaning; // Fallback to full meaning if everything had a colon or is too short
+};
+
 function App() {
   const [idioms, setIdioms] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -67,8 +88,16 @@ function App() {
       }
       
       const opts = [
-        { text: currentIdiom.meaning, isCorrect: true },
-        { text: distractorMeaning, isCorrect: false }
+        { 
+          text: getShortMeaning(currentIdiom.meaning), 
+          fullText: currentIdiom.meaning,
+          isCorrect: true 
+        },
+        { 
+          text: getShortMeaning(distractorMeaning), 
+          fullText: distractorMeaning,
+          isCorrect: false 
+        }
       ];
       const shuffled = Math.random() < 0.5 ? [opts[0], opts[1]] : [opts[1], opts[0]];
       setShuffledOptions(shuffled);
@@ -305,6 +334,12 @@ function App() {
                         </span>
                       )}
                     </div>
+                    
+                    <div className="full-definition-container">
+                      <strong>完整释义：</strong>
+                      <span className="full-definition-text">{currentIdiom.meaning}</span>
+                    </div>
+
                     {currentIdiom.examples && currentIdiom.examples.length > 0 && (
                       <div className="examples-container">
                         {currentIdiom.examples.map((ex, exIdx) => (
