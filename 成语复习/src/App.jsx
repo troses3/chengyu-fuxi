@@ -332,87 +332,89 @@ function App() {
             </div>
             <div className="card-back">
               <div className="card-back-inner">
-                <div className="group-tag">
-                  {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
-                </div>
-                <h3>{currentIdiom.word}</h3>
-                <div className="quiz-title">请选择正确的释义：</div>
-                <div className="options-container">
-                  {shuffledOptions.map((opt, index) => {
-                    let btnClass = "option-btn";
-                    if (selectedOption !== null) {
-                      if (opt.isCorrect) {
-                        btnClass += " correct";
-                      } else if (selectedOption === index) {
-                        btnClass += " incorrect";
+                <div className="card-back-content">
+                  <div className="group-tag">
+                    {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
+                  </div>
+                  <h3>{currentIdiom.word}</h3>
+                  <div className="quiz-title">请选择正确的释义：</div>
+                  <div className="options-container">
+                    {shuffledOptions.map((opt, index) => {
+                      let btnClass = "option-btn";
+                      if (selectedOption !== null) {
+                        if (opt.isCorrect) {
+                          btnClass += " correct";
+                        } else if (selectedOption === index) {
+                          btnClass += " incorrect";
+                        }
+                        btnClass += " disabled";
                       }
-                      btnClass += " disabled";
-                    }
+                      return (
+                        <button
+                          key={index}
+                          className={btnClass}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (selectedOption === null) {
+                              setSelectedOption(index);
+                            }
+                          }}
+                          disabled={selectedOption !== null}
+                        >
+                          <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
+                          <span className="option-text">{opt.text}</span>
+                          {selectedOption !== null && opt.isCorrect && (
+                            <span className="option-status-icon correct-icon">✓</span>
+                          )}
+                          {selectedOption !== null && !opt.isCorrect && selectedOption === index && (
+                            <span className="option-status-icon incorrect-icon">✗</span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {selectedOption !== null && (() => {
+                    const distractorOpt = shuffledOptions.find(o => !o.isCorrect);
+                    const isWrongSelected = selectedOption !== null && shuffledOptions[selectedOption] && !shuffledOptions[selectedOption].isCorrect;
                     return (
-                      <button
-                        key={index}
-                        className={btnClass}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (selectedOption === null) {
-                            setSelectedOption(index);
-                          }
-                        }}
-                        disabled={selectedOption !== null}
-                      >
-                        <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
-                        <span className="option-text">{opt.text}</span>
-                        {selectedOption !== null && opt.isCorrect && (
-                          <span className="option-status-icon correct-icon">✓</span>
+                      <div className="quiz-feedback-details">
+                        <div className="idiom-details">
+                          {currentIdiom.color !== '中性' && (
+                            <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
+                              {currentIdiom.color}
+                            </span>
+                          )}
+                        </div>
+                        
+                        <div className="full-definition-container">
+                          <strong>【{currentIdiom.word}】的完整释义：</strong>
+                          <span className="full-definition-text">{currentIdiom.meaning}</span>
+                        </div>
+
+                        {distractorOpt && (
+                          <div className="full-definition-container distractor-definition">
+                            <strong>
+                              【{distractorOpt.word}】的完整释义（干扰项）
+                              {isWrongSelected && " - 你误选了此项"}
+                            </strong>
+                            <span className="full-definition-text">{distractorOpt.fullText}</span>
+                          </div>
                         )}
-                        {selectedOption !== null && !opt.isCorrect && selectedOption === index && (
-                          <span className="option-status-icon incorrect-icon">✗</span>
+
+                        {currentIdiom.examples && currentIdiom.examples.length > 0 && (
+                          <div className="examples-container">
+                            {currentIdiom.examples.map((ex, exIdx) => (
+                              <div key={exIdx} className="example-item">
+                                <strong>例{exIdx + 1}：</strong>{ex}
+                              </div>
+                            ))}
+                          </div>
                         )}
-                      </button>
+                      </div>
                     );
-                  })}
+                  })()}
                 </div>
-
-                {selectedOption !== null && (() => {
-                  const distractorOpt = shuffledOptions.find(o => !o.isCorrect);
-                  const isWrongSelected = selectedOption !== null && shuffledOptions[selectedOption] && !shuffledOptions[selectedOption].isCorrect;
-                  return (
-                    <div className="quiz-feedback-details">
-                      <div className="idiom-details">
-                        {currentIdiom.color !== '中性' && (
-                          <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : 'positive'}`}>
-                            {currentIdiom.color}
-                          </span>
-                        )}
-                      </div>
-                      
-                      <div className="full-definition-container">
-                        <strong>【{currentIdiom.word}】的完整释义：</strong>
-                        <span className="full-definition-text">{currentIdiom.meaning}</span>
-                      </div>
-
-                      {distractorOpt && (
-                        <div className="full-definition-container distractor-definition">
-                          <strong>
-                            【{distractorOpt.word}】的完整释义（干扰项）
-                            {isWrongSelected && " - 你误选了此项"}
-                          </strong>
-                          <span className="full-definition-text">{distractorOpt.fullText}</span>
-                        </div>
-                      )}
-
-                      {currentIdiom.examples && currentIdiom.examples.length > 0 && (
-                        <div className="examples-container">
-                          {currentIdiom.examples.map((ex, exIdx) => (
-                            <div key={exIdx} className="example-item">
-                              <strong>例{exIdx + 1}：</strong>{ex}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
               </div>
             </div>
           </div>
