@@ -44,6 +44,21 @@ function App() {
 
   const currentIdiom = idioms[currentIndex];
 
+  const [shuffledOptions, setShuffledOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(() => {
+    if (idioms.length > 0 && currentIdiom) {
+      const opts = [
+        { text: currentIdiom.meaning, isCorrect: true },
+        { text: currentIdiom.distractor || "比喻与本意不相符的其他事物或行为。", isCorrect: false }
+      ];
+      const shuffled = Math.random() < 0.5 ? [opts[0], opts[1]] : [opts[1], opts[0]];
+      setShuffledOptions(shuffled);
+      setSelectedOption(null);
+    }
+  }, [currentIndex, idioms.length]);
+
   const handleNext = (status) => {
     const updatedIdioms = [...idioms];
     updatedIdioms[currentIndex].status = status;
@@ -147,19 +162,56 @@ function App() {
               )}
             </div>
             <div className="card-back">
-              <div className="idiom-details">
-                <h3>{currentIdiom.word}</h3>
-                <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : currentIdiom.color === '褒义' ? 'positive' : 'neutral'}`}>
-                  {currentIdiom.color}
-                </span>
-                <span className="freq-tag">考频: {currentIdiom.frequency} 次</span>
+              <h3>{currentIdiom.word}</h3>
+              <div className="quiz-title">请选择正确的释义：</div>
+              <div className="options-container">
+                {shuffledOptions.map((opt, index) => {
+                  let btnClass = "option-btn";
+                  if (selectedOption !== null) {
+                    if (opt.isCorrect) {
+                      btnClass += " correct";
+                    } else if (selectedOption === index) {
+                      btnClass += " incorrect";
+                    }
+                    btnClass += " disabled";
+                  }
+                  return (
+                    <button
+                      key={index}
+                      className={btnClass}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (selectedOption === null) {
+                          setSelectedOption(index);
+                        }
+                      }}
+                      disabled={selectedOption !== null}
+                    >
+                      <span className="option-label">{index === 0 ? 'A' : 'B'}. </span>
+                      {opt.text}
+                    </button>
+                  );
+                })}
               </div>
-              <p className="idiom-meaning">{currentIdiom.meaning}</p>
+
+              {selectedOption !== null && (
+                <div className="quiz-feedback-details">
+                  <div className="idiom-details">
+                    <span className={`color-tag ${currentIdiom.color === '贬义' ? 'negative' : currentIdiom.color === '褒义' ? 'positive' : 'neutral'}`}>
+                      {currentIdiom.color}
+                    </span>
+                    <span className="freq-tag">考频: {currentIdiom.frequency} 次</span>
+                  </div>
+                  <div className="correct-answer-reveal">
+                    <strong>正确释义：</strong>{currentIdiom.meaning}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div className={`action-buttons ${!isFlipped ? 'hidden' : ''}`}>
+        <div className={`action-buttons ${(!isFlipped || selectedOption === null) ? 'hidden' : ''}`}>
           <button className="btn btn-unknown" onClick={(e) => { e.stopPropagation(); handleNext('unknown'); }}>
             不认识
           </button>
