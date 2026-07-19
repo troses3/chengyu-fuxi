@@ -118,21 +118,15 @@ function App() {
   const [cardHeight, setCardHeight] = useState('340px');
 
   useEffect(() => {
-    if (!isFlipped) {
-      // Front of the card: Keep it compact and fixed height
-      setCardHeight('240px');
-    } else {
-      // Back of the card: Measure content height dynamically
-      // Small timeout to allow DOM to render new content before measuring
-      setTimeout(() => {
-        if (cardBackInnerRef.current) {
-          // Measure the height required by the back of the card
-          const contentHeight = cardBackInnerRef.current.scrollHeight;
-          // Enforce a minimum height of 340px for the back card to prevent squishing
-          setCardHeight(`${Math.max(340, contentHeight)}px`);
-        }
-      }, 50);
-    }
+    // Small timeout to allow DOM to render new content before measuring
+    setTimeout(() => {
+      if (cardBackInnerRef.current) {
+        // Measure the height required by the back of the card
+        const contentHeight = cardBackInnerRef.current.scrollHeight;
+        // Enforce a minimum height of 340px for the back card to prevent squishing
+        setCardHeight(`${Math.max(340, contentHeight)}px`);
+      }
+    }, 50);
   }, [selectedOption, currentIdiom, isFlipped]);
 
   useEffect(() => {
