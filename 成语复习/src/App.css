@@ -470,7 +470,7 @@ body {
   color: var(--text-primary);
   text-align: left;
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.6;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
@@ -580,7 +580,7 @@ body {
 .example-item {
   font-size: 0.72rem;
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.6;
   margin-bottom: 0.4rem;
   background: rgba(0, 0, 0, 0.015);
   padding: 0.3rem 0.45rem;
@@ -622,12 +622,11 @@ body {
 }
 
 .card-back-content {
-  margin-top: auto;
-  margin-bottom: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: 0.8rem; /* Static margin-top to prevent jumping shifts on card flip */
 }
 
 @media (max-width: 600px) {
@@ -642,7 +641,7 @@ body {
   text-align: left;
   font-size: 0.8rem;
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.6;
   background: rgba(59, 130, 246, 0.03);
   border-left: 3px solid var(--accent-color);
   padding: 0.5rem 0.75rem;
