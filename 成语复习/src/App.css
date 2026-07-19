@@ -662,11 +662,21 @@ body {
 }
 
 .distractor-definition {
-  background: rgba(239, 68, 68, 0.03);
-  border-left-color: #ef4444;
+  background: rgba(0, 0, 0, 0.015);
+  border-left-color: #9ca3af; /* Gray border for general distractors */
   margin-top: 0.6rem;
 }
 
 .distractor-definition strong {
+  color: #6b7280; /* Gray title for general distractors */
+}
+
+/* Red highlighted styling for the specific wrong option user clicked */
+.distractor-definition.user-selected-distractor {
+  background: rgba(239, 68, 68, 0.03);
+  border-left-color: #ef4444;
+}
+
+.distractor-definition.user-selected-distractor strong {
   color: #ef4444;
 }

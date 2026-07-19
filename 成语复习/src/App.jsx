@@ -393,8 +393,7 @@ function App() {
                   </div>
 
                   {selectedOption !== null && (() => {
-                    const distractorOpt = shuffledOptions.find(o => !o.isCorrect);
-                    const isWrongSelected = selectedOption !== null && shuffledOptions[selectedOption] && !shuffledOptions[selectedOption].isCorrect;
+                    const distractorOpts = shuffledOptions.filter(o => !o.isCorrect);
                     return (
                       <div className="quiz-feedback-details">
                         <div className="idiom-details">
@@ -410,15 +409,18 @@ function App() {
                           <span className="full-definition-text">{currentIdiom.meaning}</span>
                         </div>
 
-                        {distractorOpt && (
-                          <div className="full-definition-container distractor-definition">
-                            <strong>
-                              【{distractorOpt.word}】的完整释义（干扰项）
-                              {isWrongSelected && " - 你误选了此项"}
-                            </strong>
-                            <span className="full-definition-text">{distractorOpt.fullText}</span>
-                          </div>
-                        )}
+                        {distractorOpts.map((opt, idx) => {
+                          const isUserSelected = selectedOption !== null && shuffledOptions[selectedOption] === opt;
+                          return (
+                            <div key={idx} className={`full-definition-container distractor-definition ${isUserSelected ? 'user-selected-distractor' : ''}`}>
+                              <strong>
+                                【{opt.word}】的完整释义（干扰项）
+                                {isUserSelected && " - 你误选了此项"}
+                              </strong>
+                              <span className="full-definition-text">{opt.fullText}</span>
+                            </div>
+                          );
+                        })}
 
                         {currentIdiom.examples && currentIdiom.examples.length > 0 && (
                           <div className="examples-container">
