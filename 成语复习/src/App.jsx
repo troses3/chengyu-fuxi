@@ -33,7 +33,14 @@ const getShortMeaning = (meaning) => {
     parts = parts.slice(firstKwIdx);
   }
   
-  const result = parts.join('。') + (meaning.endsWith('。') ? '。' : '');
+  let result = parts.join('。') + (meaning.endsWith('。') ? '。' : '');
+  
+  // Clean up leading "也" if followed by keyword to make standalone options sound natural
+  if (result.startsWith('也比喻')) result = result.substring(1);
+  else if (result.startsWith('也指')) result = result.substring(1);
+  else if (result.startsWith('也形容')) result = result.substring(1);
+  else if (result.startsWith('也用于')) result = result.substring(1);
+  else if (result.startsWith('也表示')) result = result.substring(1);
   
   // Safe fallback if resulting string is too short/empty
   if (result.replace(/[。，；、“”‘’（）]/g, '').trim().length > 1) {
