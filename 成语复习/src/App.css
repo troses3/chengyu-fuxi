@@ -173,8 +173,7 @@ body {
   width: 1px;
   height: 14px;
   background-color: rgba(0, 0, 0, 0.12); /* Subtle light gray line */
-  margin-left: 0.8rem;  /* Shift slightly right to balance visual weight next to active buttons */
-  margin-right: 0.4rem;
+  margin: 0 0.6rem; /* Symmetric margins */
 }
 
 .mode-btn {
