@@ -79,10 +79,18 @@ function App() {
   const [isRandom, setIsRandom] = useState(() => {
     return localStorage.getItem('idiom-tracker-random') === 'true';
   });
+  const [quizMode, setQuizMode] = useState(() => {
+    return localStorage.getItem('idiom-tracker-quiz-mode') || 'meaning'; // 'meaning' or 'sentence'
+  });
+  const [currentExample, setCurrentExample] = useState('');
 
   useEffect(() => {
     localStorage.setItem('idiom-tracker-random', isRandom);
   }, [isRandom]);
+
+  useEffect(() => {
+    localStorage.setItem('idiom-tracker-quiz-mode', quizMode);
+  }, [quizMode]);
 
   useEffect(() => {
     // Load from local storage or use initial
@@ -151,13 +159,13 @@ function App() {
 
       const opts = [
         { 
-          text: getShortMeaning(currentIdiom.meaning), 
+          text: quizMode === 'sentence' ? currentIdiom.word : getShortMeaning(currentIdiom.meaning), 
           fullText: currentIdiom.meaning,
           isCorrect: true,
           word: currentIdiom.word
         },
         ...distractors.map(d => ({
-          text: getShortMeaning(d.meaning),
+          text: quizMode === 'sentence' ? d.word : getShortMeaning(d.meaning),
           fullText: d.meaning,
           isCorrect: false,
           word: d.word
@@ -168,8 +176,15 @@ function App() {
       const shuffled = [...opts].sort(() => Math.random() - 0.5);
       setShuffledOptions(shuffled);
       setSelectedOption(null);
+      
+      if (currentIdiom.examples && currentIdiom.examples.length > 0) {
+        const randomEx = currentIdiom.examples[Math.floor(Math.random() * currentIdiom.examples.length)];
+        setCurrentExample(randomEx);
+      } else {
+        setCurrentExample('');
+      }
     }
-  }, [currentIndex, idioms.length]);
+  }, [currentIndex, idioms.length, quizMode]);
 
   const handleFilterClick = (targetFilter) => {
     if (filter === targetFilter) {
@@ -330,8 +345,11 @@ function App() {
             </button>
           </div>
           <div className="mode-toggle">
-            <button className={`mode-btn ${!isRandom ? 'active' : ''}`} onClick={() => setIsRandom(false)}>顺序模式</button>
-            <button className={`mode-btn ${isRandom ? 'active' : ''}`} onClick={() => setIsRandom(true)}>随机模式</button>
+            <button className={`mode-btn ${quizMode === 'meaning' ? 'active' : ''}`} onClick={() => setQuizMode('meaning')}>释义模式</button>
+            <button className={`mode-btn ${quizMode === 'sentence' ? 'active' : ''}`} onClick={() => setQuizMode('sentence')}>例句模式</button>
+            <span className="mode-divider" style={{margin: '0 4px', color: '#ccc'}}>|</span>
+            <button className={`mode-btn ${!isRandom ? 'active' : ''}`} onClick={() => setIsRandom(false)}>顺序</button>
+            <button className={`mode-btn ${isRandom ? 'active' : ''}`} onClick={() => setIsRandom(true)}>随机</button>
           </div>
         </div>
       </header>
@@ -340,8 +358,14 @@ function App() {
         <div className={`card-container ${selectedOption !== null ? 'expanded' : ''}`} style={{ height: cardHeight }} onClick={() => setIsFlipped(!isFlipped)}>
           <div className={`card ${isFlipped ? 'flipped' : ''}`}>
             <div className="card-front">
-              <h2 className="idiom-word">{currentIdiom.word}</h2>
-              <div className="card-hint">点击翻转查看释义</div>
+              {quizMode === 'sentence' ? (
+                <h2 className="idiom-word sentence-blank">
+                  {currentExample ? currentExample.replace(new RegExp(currentIdiom.word, 'g'), '______') : '（暂无例句）'}
+                </h2>
+              ) : (
+                <h2 className="idiom-word">{currentIdiom.word}</h2>
+              )}
+              <div className="card-hint">点击翻转查看{quizMode === 'sentence' ? '选项' : '释义'}</div>
               {currentIdiom.status !== 'new' && (
                 <div className="status-badge" style={{backgroundColor: getStatusColor(currentIdiom.status)}}>
                   上次标记: {currentIdiom.status === 'known' ? '认识' : currentIdiom.status === 'unsure' ? '模糊' : '不认识'}
@@ -354,9 +378,15 @@ function App() {
                   {currentIdiom.group} {currentIdiom.subcategory ? `· ${currentIdiom.subcategory}` : ''}
                 </div>
                 <div className="card-back-content">
-                  <h3>{currentIdiom.word}</h3>
-                  <div className="quiz-title">请选择正确的释义：</div>
-                  <div className={`options-container ${selectedOption === null ? 'quiz-not-answered' : ''}`}>
+                  {quizMode === 'sentence' ? (
+                    <div className="sentence-question">
+                      {currentExample ? currentExample.replace(new RegExp(currentIdiom.word, 'g'), '______') : '（暂无例句）'}
+                    </div>
+                  ) : (
+                    <h3>{currentIdiom.word}</h3>
+                  )}
+                  <div className="quiz-title">请选择正确的{quizMode === 'sentence' ? '成语' : '释义'}：</div>
+                  <div className={`options-container ${quizMode === 'sentence' ? 'options-grid-2x2' : ''} ${selectedOption === null ? 'quiz-not-answered' : ''}`}>
                     {shuffledOptions.map((opt, index) => {
                       let btnClass = "option-btn";
                       if (selectedOption !== null) {
@@ -380,7 +410,7 @@ function App() {
                           disabled={selectedOption !== null}
                         >
                           <span className="option-label">{['A', 'B', 'C', 'D'][index]}. </span>
-                          <span className="option-text">{opt.text}</span>
+                          <span className={quizMode === 'sentence' ? 'option-text-word' : 'option-text'}>{opt.text}</span>
                           {selectedOption !== null && opt.isCorrect && (
                             <span className="option-status-icon correct-icon">✓</span>
                           )}
@@ -424,11 +454,22 @@ function App() {
 
                         {currentIdiom.examples && currentIdiom.examples.length > 0 && (
                           <div className="examples-container">
-                            {currentIdiom.examples.map((ex, exIdx) => (
-                              <div key={exIdx} className="example-item">
-                                <strong>例{exIdx + 1}：</strong>{ex}
-                              </div>
-                            ))}
+                            {currentIdiom.examples.map((ex, exIdx) => {
+                              // Highlight the filled idiom in the sentence if this is the example used
+                              const isCurrentExample = quizMode === 'sentence' && ex === currentExample;
+                              return (
+                                <div key={exIdx} className={`example-item ${isCurrentExample ? 'highlighted-example' : ''}`}>
+                                  <strong>例{exIdx + 1}：</strong>
+                                  {isCurrentExample ? (
+                                    <span>
+                                      {ex.split(new RegExp(`(${currentIdiom.word})`, 'g')).map((part, i) => 
+                                        part === currentIdiom.word ? <span key={i} className="filled-idiom">{part}</span> : part
+                                      )}
+                                    </span>
+                                  ) : ex}
+                                </div>
+                              );
+                            })}
                           </div>
                         )}
                       </div>
