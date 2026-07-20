@@ -654,7 +654,7 @@ body {
 .full-definition-container strong {
   display: block;
   font-size: 0.8rem; /* Increased from 0.72rem */
-  color: #f59e0b; /* Golden yellow for all definition titles */
+  color: var(--accent-color); /* Blue for the correct definition title */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.25rem;
@@ -663,8 +663,12 @@ body {
 
 .distractor-definition {
   background: rgba(245, 158, 11, 0.015); /* Extemely soft warm yellow tint */
-  border-left-color: rgba(245, 158, 11, 0.4); /* Softer semi-transparent amber border */
+  border-left-color: #f59e0b; /* Solid yellow border for general distractors */
   margin-top: 0.6rem;
+}
+
+.distractor-definition strong {
+  color: #f59e0b; /* Yellow for distractor definition titles */
 }
 
 /* Red highlighted styling for the specific wrong option user clicked */
