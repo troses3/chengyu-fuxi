@@ -470,7 +470,7 @@ body {
   .sentence-question { font-size: 1.1rem; } /* Unified mobile font size to prevent shift on flip */
   
   .options-grid-2x2 .option-btn {
-    font-size: 1.1rem; /* Unifies option text size with sentence question on mobile */
+    font-size: 1.0rem; /* One size smaller than sentence (1.1rem) on mobile */
   }
 
   .card-container {
@@ -512,7 +512,7 @@ body {
 .options-grid-2x2 .option-btn {
   align-items: center;
   padding: 0.8rem 1rem;
-  font-size: 1.2rem; /* Keep consistent with sentence-blank on desktop */
+  font-size: 1.1rem; /* One size smaller than sentence (1.2rem) on desktop */
 }
 
 .option-btn {
