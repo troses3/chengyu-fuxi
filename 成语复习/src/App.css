@@ -469,6 +469,10 @@ body {
   .sentence-blank { font-size: 1.1rem; } /* Unified mobile font size for long sentences */
   .sentence-question { font-size: 1.1rem; } /* Unified mobile font size to prevent shift on flip */
   
+  .options-grid-2x2 .option-btn {
+    font-size: 1.1rem; /* Unifies option text size with sentence question on mobile */
+  }
+
   .card-container {
     height: 340px; /* Keep consistent default height on mobile */
   }
@@ -508,6 +512,7 @@ body {
 .options-grid-2x2 .option-btn {
   align-items: center;
   padding: 0.8rem 1rem;
+  font-size: 1.2rem; /* Keep consistent with sentence-blank on desktop */
 }
 
 .option-btn {
@@ -549,7 +554,7 @@ body {
 .option-text-word {
   flex: 1;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: inherit; /* Inherit from button (1.2rem on desktop, 1.1rem on mobile) */
   font-weight: 700;
   letter-spacing: 0.1rem;
 }
