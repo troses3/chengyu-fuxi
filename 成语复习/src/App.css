@@ -510,9 +510,18 @@ body {
 }
 
 .options-grid-2x2 .option-btn {
+  justify-content: center; /* Center the label and text together as a group */
   align-items: center;
   padding: 0.8rem 1rem;
   font-size: 1.1rem; /* One size smaller than sentence (1.2rem) on desktop */
+}
+
+.options-grid-2x2 .option-label {
+  margin-right: 0.25rem; /* Tighter gap in grid mode */
+}
+
+.options-grid-2x2 .option-text-word {
+  flex: none; /* Disable grow to allow centering as a unified block */
 }
 
 .option-btn {
