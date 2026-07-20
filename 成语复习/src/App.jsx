@@ -135,7 +135,7 @@ function App() {
         setCardHeight(`${Math.max(340, contentHeight)}px`);
       }
     }, 50);
-  }, [selectedOption, currentIdiom, isFlipped]);
+  }, [selectedOption, currentIdiom, isFlipped, quizMode]);
 
   useEffect(() => {
     if (idioms.length > 0 && currentIdiom) {
