@@ -159,6 +159,7 @@ body {
 
 .mode-toggle {
   display: flex;
+  align-items: center; /* Vertically center buttons and divider */
   background: rgba(0, 0, 0, 0.05);
   padding: 0.25rem;
   border-radius: 20px;
@@ -166,6 +167,13 @@ body {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
+}
+
+.mode-divider {
+  width: 1px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.12); /* Subtle light gray line */
+  margin: 0 0.4rem;
 }
 
 .mode-btn {
