@@ -95,15 +95,36 @@ function App() {
   useEffect(() => {
     // Load from local storage or use initial
     const stored = localStorage.getItem(STORAGE_KEY);
+    let loadedIdioms = [];
     if (stored) {
-      setIdioms(JSON.parse(stored));
+      loadedIdioms = JSON.parse(stored);
     } else {
-      const initialized = initialIdioms.map(idiom => ({
+      loadedIdioms = initialIdioms.map(idiom => ({
         ...idiom,
         status: 'new' // 'new', 'known', 'unsure', 'unknown'
       }));
-      setIdioms(initialized);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialized));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(loadedIdioms));
+    }
+    setIdioms(loadedIdioms);
+
+    // Pick a random starting index if random mode is active on load
+    const isRandomStored = localStorage.getItem('idiom-tracker-random') === 'true';
+    if (isRandomStored && loadedIdioms.length > 0) {
+      // Prioritize idioms that are not yet marked as 'known'
+      const candidateIndices = [];
+      loadedIdioms.forEach((idiom, index) => {
+        if (idiom.status !== 'known') {
+          candidateIndices.push(index);
+        }
+      });
+
+      if (candidateIndices.length > 0) {
+        const randIndex = candidateIndices[Math.floor(Math.random() * candidateIndices.length)];
+        setCurrentIndex(randIndex);
+      } else {
+        const randIndex = Math.floor(Math.random() * loadedIdioms.length);
+        setCurrentIndex(randIndex);
+      }
     }
   }, []);
 
