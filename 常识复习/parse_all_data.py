@@ -210,10 +210,44 @@ card_title = ""
 card_lines = []
 
 def clean_title_str(raw_t):
-    t = re.sub(r'^[0-9一二三四五六七八九十\.\（\(\)\）、\s]+', '', raw_t).strip()
+    t = raw_t.strip()
+    t = re.sub(r'^[0-9一二三四五六七八九十\.\（\(\)\）、\s]+', '', t).strip()
     t = re.sub(r'^[【［（(]*[一二三四五六七八九十\d]+[）)]*[、．\s]*', '', t).strip()
-    t = re.sub(r'[”"“‘’。；，,;：:）\)]', '', t).strip()
-    return t[:15] if t else "考点"
+    t = re.sub(r'[［【\[\(（]?(立|修|新|重|难)[］】\]\)）]?', '', t).strip()
+    
+    m_head = re.split(r'[：:；;\—\–]', t)
+    if len(m_head) > 1 and 2 <= len(m_head[0]) <= 22:
+        t = m_head[0].strip()
+
+    t = re.sub(r'[。；，,;：:［］【】\-\—]+$', '', t).strip()
+
+    if len(t) > 25:
+        if ')' in t or '）' in t:
+            close_idx = max(t.rfind(')'), t.rfind('）'))
+            if close_idx <= 30:
+                t = t[:close_idx+1]
+            else:
+                t = t[:25].strip()
+        else:
+            t = t[:25].strip()
+
+    if t.count('(') > t.count(')'):
+        open_idx = t.rfind('(')
+        if len(t) - open_idx <= 10: t += ')'
+        else: t = t[:open_idx].strip()
+
+    if t.count('（') > t.count('）'):
+        open_idx = t.rfind('（')
+        if len(t) - open_idx <= 10: t += '）'
+        else: t = t[:open_idx].strip()
+
+    if t.count(')') > t.count('('):
+        if '(' not in t: t = t.replace(')', '')
+    if t.count('）') > t.count('（'):
+        if '（' not in t: t = t.replace('）', '')
+
+    t = re.sub(r'[。；，,;：:［］【】\-\—]+$', '', t).strip()
+    return t if t else "考点"
 
 def emit_atomic_card(p_title, lines_arr):
     if not lines_arr:
@@ -282,7 +316,7 @@ while i < len(body_lines):
         continue
 
     # 原子拆分节点 (如 概念、注意、1. 民事权利能力、重力、摩擦力、仰韶文化 等)
-    sub_m = re.match(r'^(概念|注意|有关规定|定义／核心要点|生活应用举例|[0-9]+\.[^\n]{2,15}|（[0-9]）[^\n]{2,15}|[一二三四五六七八九十]+[、．][^\n]{2,15}|[【［](.*?)[】］])', l)
+    sub_m = re.match(r'^(概念|注意|有关规定|定义／核心要点|生活应用举例|[0-9]+\.[^\n]{2,35}|（[0-9]）[^\n]{2,35}|[一二三四五六七八九十]+[、．][^\n]{2,35}|[【［](.*?)[】］])', l)
     if sub_m and len(card_lines) > 0 and "真题再现" not in l:
         emit_atomic_card(card_title, card_lines)
         card_title = sub_m.group(1).replace("【", "").replace("】", "").replace("［", "").replace("］", "").strip()

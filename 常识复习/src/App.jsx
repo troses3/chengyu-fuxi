@@ -233,10 +233,10 @@ export default function App() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'known': return '#10b981';
-      case 'unsure': return '#f59e0b';
-      case 'unknown': return '#ef4444';
-      default: return '#6b7280';
+      case 'known': return 'rgba(16, 185, 129, 0.8)';
+      case 'unsure': return 'rgba(245, 158, 11, 0.8)';
+      case 'unknown': return 'rgba(239, 68, 68, 0.8)';
+      default: return 'rgba(107, 114, 128, 0.8)';
     }
   };
 
@@ -359,7 +359,18 @@ export default function App() {
             {/* 卡片正面 */}
             <div className="card-front">
               {activeMode === 'knowledge' ? (
-                <h2 className="idiom-word">{currentItem.title}</h2>
+                <h2 
+                  className="idiom-word" 
+                  style={(() => {
+                    const len = (currentItem.title || '').length;
+                    if (len <= 4) return { fontSize: '2.6rem', fontWeight: '800', letterSpacing: '0.1rem' };
+                    if (len <= 8) return { fontSize: '1.9rem', fontWeight: '700', letterSpacing: '0.04rem', lineHeight: '1.35' };
+                    if (len <= 14) return { fontSize: '1.5rem', fontWeight: '700', letterSpacing: '0.02rem', lineHeight: '1.4' };
+                    return { fontSize: '1.25rem', fontWeight: '700', letterSpacing: '0', lineHeight: '1.45' };
+                  })()}
+                >
+                  {currentItem.title}
+                </h2>
               ) : (
                 <div style={{ padding: '0 0.5rem', textAlign: 'left', width: '100%' }}>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', fontWeight: '700' }}>
