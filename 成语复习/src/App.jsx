@@ -324,10 +324,10 @@ function App() {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'known': return '#10b981';
-      case 'unsure': return '#f59e0b';
-      case 'unknown': return '#ef4444';
-      default: return '#6b7280';
+      case 'known': return 'rgba(16, 185, 129, 0.8)';
+      case 'unsure': return 'rgba(245, 158, 11, 0.8)';
+      case 'unknown': return 'rgba(239, 68, 68, 0.8)';
+      default: return 'rgba(107, 114, 128, 0.8)';
     }
   };
 
