@@ -83,6 +83,7 @@ function App() {
     return localStorage.getItem('idiom-tracker-quiz-mode') || 'meaning'; // 'meaning' or 'sentence'
   });
   const [currentExample, setCurrentExample] = useState('');
+  const [history, setHistory] = useState([]); // Track navigation history
 
   useEffect(() => {
     localStorage.setItem('idiom-tracker-random', isRandom);
@@ -234,6 +235,9 @@ function App() {
     setIdioms(updatedIdioms);
     setIsFlipped(false);
     
+    // Save to history before navigating
+    setHistory(prev => [...prev, currentIndex]);
+
     // Select next idiom index
     setTimeout(() => {
       let nextIndex = currentIndex;
@@ -305,6 +309,17 @@ function App() {
       
       setCurrentIndex(nextIndex);
     }, 300);
+  };
+
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    if (history.length > 0) {
+      const prevIndex = history[history.length - 1];
+      setHistory(prev => prev.slice(0, -1));
+      setCurrentIndex(prevIndex);
+      setIsFlipped(false);
+      setSelectedOption(null);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -501,6 +516,9 @@ function App() {
         </div>
 
         <div className={`action-buttons ${(!isFlipped || selectedOption === null) ? 'hidden' : ''}`}>
+          <button className="btn btn-prev" onClick={handlePrev} disabled={history.length === 0}>
+            上一题
+          </button>
           <button className="btn btn-unknown" onClick={(e) => { e.stopPropagation(); handleNext('unknown'); }}>
             不认识
           </button>

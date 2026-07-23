@@ -378,8 +378,19 @@ body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.btn:active {
+.btn:active:not(:disabled) {
   transform: scale(0.95);
+}
+
+.btn-prev {
+  background: rgba(107, 114, 128, 0.7); /* Slate gray */
+  flex: 0.7; /* Slightly narrower than grading buttons */
+}
+.btn-prev:hover:not(:disabled) { background: rgba(107, 114, 128, 1); }
+.btn-prev:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .btn-unknown {
