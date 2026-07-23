@@ -384,7 +384,6 @@ body {
 
 .btn-prev {
   background: rgba(107, 114, 128, 0.7); /* Slate gray */
-  flex: 0.7; /* Slightly narrower than grading buttons */
 }
 .btn-prev:hover:not(:disabled) { background: rgba(107, 114, 128, 1); }
 .btn-prev:disabled {
@@ -486,6 +485,15 @@ body {
 
   .card-container {
     height: 340px; /* Keep consistent default height on mobile */
+  }
+
+  .action-buttons {
+    gap: 0.4rem;
+  }
+
+  .btn {
+    padding: 0.6rem 0.2rem;
+    font-size: 0.85rem;
   }
 }
 
